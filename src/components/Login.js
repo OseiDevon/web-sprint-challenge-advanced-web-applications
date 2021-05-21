@@ -1,16 +1,73 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 
 const Login = () => {
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
+  const history = useHistory();
+  const [state, setState] = useState({
+    credentials: {
+        username: '',
+        password: ''
+    }
+  })
+
+  const [error, setError] = useState({
+    error: ''
+  })
+
+  const handleChange = e => {
+    setState({
+      credentials: {
+        ...state.credentials,
+        [e.target.name]: e.target.value
+      }
+    });
+  };
+
+  const login = e => {
+    e.preventDefault();
+    if (state.credentials.username === '' || state.credentials.password === '') {
+      setError({
+        error: 'Username or Password not valid.'
+      })
+      console.log(error.error)
+    }
+    axios
+    .post('http://localhost:5000/api/login', state.credentials)
+    .then(res => {
+      localStorage.setItem('token', res.data.payload);
+      history.push('/bubblepage')
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  };
 
   useEffect(()=>{
     // make a post request to retrieve a token from the api
     // when you have handled the token, navigate to the BubblePage route
-  });
-  
+    axios.get(`http://localhost:5000/api/login${id}`)
+		.then(res=>{
+				setBubblePage(res.data);
+		})
+		.catch(err=>{
+				console.log(err.response);
+		})
+	},[]);
+
   const error = "";
   //replace with error state
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+    .get("http://localhost:5000/api/login", formValues)
+    .then((res) => {
+      window.localStorage.setItem('token', res.data.payload);
+      // push("/bubblepage");
+    })
+    .catch((err) => console.log(err.message));
+};
 
   return (
     <div>
@@ -20,6 +77,23 @@ const Login = () => {
       </div>
 
       <p data-testid="errorMessage" className="error">{error}</p>
+      <form onSubmit={handleSubmit}>
+      <label htmlFor="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          value={formValues.username}
+          onChange={handleChanges}/>
+
+      <label htmlFor="password">Password</label>
+        <input
+        id="password"
+        name="password"
+        type="password"
+        value ={formValues.password}
+        onChange={handleChanges}/>
+        <button>Login</button>
+        </form>
     </div>
   );
 };

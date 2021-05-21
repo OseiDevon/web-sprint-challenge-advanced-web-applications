@@ -4,10 +4,21 @@ import BubblePage from "./BubblePage";
 
 test("Renders BubblePage without errors", () => {
   // Finish this test
+  render(<BubblePage/>);
 });
 
 test("Fetches data and renders the bubbles on mounting", () => {
   // Finish this test
+  render(<BubblePage isFetchingData={true}/>);
+
+
+  const value = screen.queryByText(/we are fetching data/i);
+
+
+  expect(value).toBeInTheDocument();
+  expect(value).toBeTruthy();
+  expect(value).toHaveTextContent(/we are fetching data/i);
+  expect(value).not.toBeNull();
 });
 
 //Task List

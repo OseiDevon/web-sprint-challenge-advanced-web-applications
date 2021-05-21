@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+import PrivateRoute from "./components/PrivateRoute";
+import BubblesPage from "./components/BubblesPage"
+import Bubbles from "./components/Bubbles";
 
 import Login from "./components/Login";
 import "./styles.scss";
@@ -11,10 +15,27 @@ function App() {
         <header>
           Color Picker Sprint Challenge
           <a data-testid="logoutButton" href="#">logout</a>
-        </header> 
+        </header>
 
         <Route exact path="/" component={Login} />
       </div>
+
+
+      <Switch>
+     <PrivateRoute path="/bubblespage" component={BubblesPage}>
+       <BubblesPage />
+     </PrivateRoute>
+
+     <Route path ="/login">
+       <Login />
+     </Route>
+
+     <Route path ="/login">
+       <Login />
+     </Route>
+
+     </Switch>
+
     </Router>
   );
 }
